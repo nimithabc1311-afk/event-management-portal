@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Event Management Portal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-brand">🎉 EventHub</div>
+    <div class="nav-links">
+      <button class="btn btn-nav active" onclick="showPage('home', this)">Home</button>
+      <button class="btn btn-nav" onclick="showPage('events', this)">Events</button>
+      <button class="btn btn-nav" onclick="showPage('register', this)">Register</button>
+      <button class="btn btn-nav" onclick="showPage('myregistrations', this)">My Registrations</button>
+      <button class="btn btn-nav" onclick="showPage('admin', this)">Admin</button>
+    </div>
+  </nav>
+
+  <!-- ===== HOME PAGE ===== -->
+  <div id="page-home" class="page active">
+    <div class="hero">
+      <div class="hero-content">
+        <h1>Discover Amazing Events</h1>
+        <p>Find, explore and register for events happening around you</p>
+        <button class="btn btn-hero" onclick="showPage('events', null)">Explore Events</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-icon">🎪</span>
+          <span class="stat-num" id="stat-total">0</span>
+          <span class="stat-label">Total Events</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">👥</span>
+          <span class="stat-num" id="stat-registrations">0</span>
+          <span class="stat-label">Registrations</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📅</span>
+          <span class="stat-num" id="stat-upcoming">0</span>
+          <span class="stat-label">Upcoming</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🏷️</span>
+          <span class="stat-num">6</span>
+          <span class="stat-label">Categories</span>
+        </div>
+      </div>
+
+      <!-- CATEGORIES -->
+      <h2 class="section-title">Browse by Category</h2>
+      <div class="categories-grid">
+        <div class="cat-card" onclick="filterByCategory('Music')">
+          <span class="cat-icon">🎵</span>
+          <span class="cat-name">Music</span>
+        </div>
+        <div class="cat-card" onclick="filterByCategory('Technology')">
+          <span class="cat-icon">💻</span>
+          <span class="cat-name">Technology</span>
+        </div>
+        <div class="cat-card" onclick="filterByCategory('Sports')">
+          <span class="cat-icon">⚽</span>
+          <span class="cat-name">Sports</span>
+        </div>
+        <div class="cat-card" onclick="filterByCategory('Food')">
+          <span class="cat-icon">🍕</span>
+          <span class="cat-name">Food</span>
+        </div>
+        <div class="cat-card" onclick="filterByCategory('Art')">
+          <span class="cat-icon">🎨</span>
+          <span class="cat-name">Art</span>
+        </div>
+        <div class="cat-card" onclick="filterByCategory('Business')">
+          <span class="cat-icon">💼</span>
+          <span class="cat-name">Business</span>
+        </div>
+      </div>
+
+      <!-- FEATURED EVENTS -->
+      <h2 class="section-title">Featured Events</h2>
+      <div id="featured-events" class="events-grid"></div>
+    </div>
+  </div>
+
+  <!-- ===== EVENTS PAGE ===== -->
+  <div id="page-events" class="page">
+    <div class="container">
+      <div class="page-header">
+        <h2>All Events</h2>
+        <div class="filter-row">
+          <input type="text" id="search-input" placeholder="🔍 Search events..." oninput="renderEvents()" />
+          <select id="filter-category" onchange="renderEvents()">
+            <option value="all">All Categories</option>
+            <option value="Music">🎵 Music</option>
+            <option value="Technology">💻 Technology</option>
+            <option value="Sports">⚽ Sports</option>
+            <option value="Food">🍕 Food</option>
+            <option value="Art">🎨 Art</option>
+            <option value="Business">💼 Business</option>
+          </select>
+        </div>
+      </div>
+      <div id="events-grid" class="events-grid"></div>
+    </div>
+  </div>
+
+  <!-- ===== REGISTER PAGE ===== -->
+  <div id="page-register" class="page">
+    <div class="container">
+      <div class="form-card">
+        <h2>📝 Register for an Event</h2>
+        <div id="reg-error"   class="error-msg"   style="display:none"></div>
+        <div id="reg-success" class="success-msg" style="display:none"></div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="reg-name" placeholder="Your full name" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="reg-email" placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="reg-phone" placeholder="10-digit number" />
+          </div>
+          <div class="form-group">
+            <label>Select Event</label>
+            <select id="reg-event">
+              <option value="">-- Select an event --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Number of Tickets</label>
+            <select id="reg-tickets">
+              <option value="1">1 Ticket</option>
+              <option value="2">2 Tickets</option>
+              <option value="3">3 Tickets</option>
+              <option value="4">4 Tickets</option>
+              <option value="5">5 Tickets</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Special Requirements</label>
+            <input type="text" id="reg-notes" placeholder="Any special needs? (optional)" />
+          </div>
+        </div>
+
+        <!-- EVENT PREVIEW -->
+        <div id="event-preview" class="event-preview" style="display:none">
+          <h3>📌 Event Details</h3>
+          <div class="preview-grid">
+            <div class="preview-item"><span>Event</span><strong id="prev-name">-</strong></div>
+            <div class="preview-item"><span>Category</span><strong id="prev-cat">-</strong></div>
+            <div class="preview-item"><span>Date</span><strong id="prev-date">-</strong></div>
+            <div class="preview-item"><span>Venue</span><strong id="prev-venue">-</strong></div>
+            <div class="preview-item"><span>Tickets</span><strong id="prev-tickets">-</strong></div>
+            <div class="preview-item"><span>Total Fee</span><strong id="prev-total">-</strong></div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary reg-btn" onclick="registerForEvent()">✅ Confirm Registration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MY REGISTRATIONS PAGE ===== -->
+  <div id="page-myregistrations" class="page">
+    <div class="container">
+      <div class="page-header">
+        <h2>🎟️ My Registrations</h2>
+        <button class="btn btn-danger-outline" onclick="clearRegistrations()">🗑 Clear All</button>
+      </div>
+      <div id="registrations-list"></div>
+    </div>
+  </div>
+
+  <!-- ===== ADMIN PAGE ===== -->
+  <div id="page-admin" class="page">
+    <div class="container">
+      <h2 class="section-title">🔧 Admin Dashboard</h2>
+
+      <div class="admin-stats">
+        <div class="admin-stat"><span id="a-total">0</span><label>Total Events</label></div>
+        <div class="admin-stat"><span id="a-regs">0</span><label>Registrations</label></div>
+        <div class="admin-stat"><span id="a-upcoming">0</span><label>Upcoming</label></div>
+        <div class="admin-stat"><span id="a-revenue">₹0</span><label>Total Revenue</label></div>
+      </div>
+
+      <!-- ADD EVENT FORM -->
+      <div class="admin-form-card">
+        <h3>➕ Add New Event</h3>
+        <div id="admin-error"   class="error-msg"   style="display:none"></div>
+        <div id="admin-success" class="success-msg" style="display:none"></div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Event Name</label>
+            <input type="text" id="ev-name" placeholder="Event title" />
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="ev-category">
+              <option value="Music">🎵 Music</option>
+              <option value="Technology">💻 Technology</option>
+              <option value="Sports">⚽ Sports</option>
+              <option value="Food">🍕 Food</option>
+              <option value="Art">🎨 Art</option>
+              <option value="Business">💼 Business</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="ev-date" />
+          </div>
+          <div class="form-group">
+            <label>Time</label>
+            <input type="time" id="ev-time" />
+          </div>
+          <div class="form-group">
+            <label>Venue</label>
+            <input type="text" id="ev-venue" placeholder="Location / venue name" />
+          </div>
+          <div class="form-group">
+            <label>Ticket Price (₹)</label>
+            <input type="number" id="ev-price" placeholder="0 for free" />
+          </div>
+          <div class="form-group">
+            <label>Total Seats</label>
+            <input type="number" id="ev-seats" placeholder="e.g. 100" />
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" id="ev-desc" placeholder="Short description" />
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="addEvent()">➕ Add Event</button>
+      </div>
+
+      <!-- EVENTS TABLE -->
+      <h3 style="margin: 32px 0 16px; color:#1a1a2e;">All Events</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Event Name</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th>Venue</th>
+              <th>Price</th>
+              <th>Seats</th>
+              <th>Registered</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Designed & Built by <strong>Nimitha BC</strong> • Event Management Portal</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
