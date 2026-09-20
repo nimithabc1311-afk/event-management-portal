@@ -63,6 +63,8 @@ event-management/
 ---
 
 ## 📸 Pages
+<img width="1920" height="853" alt="event " src="https://github.com/user-attachments/assets/ff5a2ce3-1377-444c-9f19-21dcaf770437" />
+
 
 - **Home** — Hero banner, stats, category grid, featured events
 - **Events** — All events with search and category filter
